@@ -74,6 +74,10 @@ class BlueThermalPrinter {
   Future<bool?> isDeviceConnected(BluetoothDevice device) =>
       _channel.invokeMethod('isDeviceConnected', device.toMap());
 
+  ///getDeviceName(BluetoothDevice device)
+  Future<String?> getDeviceName(BluetoothDevice device) =>
+      _channel.invokeMethod('getDeviceName', device.toMap());
+
   ///connect(BluetoothDevice device)
   Future<dynamic> connect(BluetoothDevice device) =>
       _channel.invokeMethod('connect', device.toMap());
