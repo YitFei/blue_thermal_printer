@@ -203,9 +203,8 @@ class _MyAppState extends State<MyApp> {
       ));
     } else {
       _devices.forEach((device) {
-        testDeviceAlisName(device);
         items.add(DropdownMenuItem(
-          child: Text(device.name ?? ""),
+          child: Text(device.aliasName ?? ""),
           value: device,
         ));
       });
@@ -214,7 +213,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void testDeviceAlisName(BluetoothDevice device) {
-    bluetooth.getDeviceName(device);
+    bluetooth.getAliasName(device);
   }
 
   void _connect() {

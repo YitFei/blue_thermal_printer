@@ -271,10 +271,10 @@ public class BlueThermalPrinterPlugin implements FlutterPlugin, ActivityAware,Me
 
         break;
 
-      case "getDeviceName":
+      case "getAliasName":
         if (arguments.containsKey("address")) {
                 String address = (String) arguments.get("address");
-                getDeviceName(result, address);
+                getAliasName(result, address);
         } else {
                 result.error("invalid_argument", "argument 'address' not found", null);
         }
@@ -470,6 +470,7 @@ public class BlueThermalPrinterPlugin implements FlutterPlugin, ActivityAware,Me
       ret.put("address", device.getAddress());
       ret.put("name", device.getName());
       ret.put("type", device.getType());
+      ret.put("aliasName", getAliasName(device));
       list.add(ret);
     }
 
@@ -512,22 +513,22 @@ public class BlueThermalPrinterPlugin implements FlutterPlugin, ActivityAware,Me
     return sw.toString();
   }
 
-  private void getDeviceName(Result result, String address) {
+  private void getAliasName(Result result, String address) {
       try {
           BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
           if (device == null) {
               result.error("device_not_found", "Device not found", null);
               return;
           }
-          String name = getDeviceName(device);
+          String name = getAliasName(device);
           result.success(name);
       } catch (Exception e) {
-          Log.e(TAG, "Error getting device name", e);
+          Log.e(TAG, "Error getting device alias name", e);
           result.error("get_device_name_error", e.getMessage(), exceptionToString(e));
       }
   }
 
-  private String getDeviceName(BluetoothDevice device) {
+  private String getAliasName(BluetoothDevice device) {
     try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             String alias = device.getAlias();

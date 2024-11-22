@@ -74,9 +74,9 @@ class BlueThermalPrinter {
   Future<bool?> isDeviceConnected(BluetoothDevice device) =>
       _channel.invokeMethod('isDeviceConnected', device.toMap());
 
-  ///getDeviceName(BluetoothDevice device)
-  Future<String?> getDeviceName(BluetoothDevice device) =>
-      _channel.invokeMethod('getDeviceName', device.toMap());
+  ///getAliasName(BluetoothDevice device)
+  Future<String?> getAliasName(BluetoothDevice device) =>
+      _channel.invokeMethod('getAliasName', device.toMap());
 
   ///connect(BluetoothDevice device)
   Future<dynamic> connect(BluetoothDevice device) =>
@@ -175,24 +175,29 @@ class BlueThermalPrinter {
 class BluetoothDevice {
   final String? name;
   final String? address;
+  final String? aliasName;
   final int type = 0;
   bool connected = false;
 
-  BluetoothDevice(this.name, this.address);
+  BluetoothDevice(this.name, this.address, this.aliasName);
 
   BluetoothDevice.fromMap(Map map)
       : name = map['name'],
-        address = map['address'];
+        address = map['address'],
+        aliasName = map['aliasName'];
 
   Map<String, dynamic> toMap() => {
         'name': this.name,
         'address': this.address,
         'type': this.type,
+        'aliasName': this.aliasName,
         'connected': this.connected,
       };
 
   operator ==(Object other) {
-    return other is BluetoothDevice && other.address == this.address;
+    return other is BluetoothDevice &&
+        other.address == this.address &&
+        other.aliasName == this.aliasName;
   }
 
   @override
