@@ -179,7 +179,7 @@ class BluetoothDevice {
   final String? aliasName;
   final int type = 0;
   bool connected = false;
-  List<PrintType> printTypes = [];
+  List<PrinterType> printerTypes = [];
 
   BluetoothDevice(this.name, this.address, this.aliasName);
 
@@ -187,13 +187,13 @@ class BluetoothDevice {
       : name = map['name'],
         address = map['address'],
         aliasName = map['aliasName'],
-        printTypes = map['printTypes'] != null
-            ? List<Map<String, dynamic>>.from(jsonDecode(map['printTypes']))
+        printerTypes = map['printerTypes'] != null
+            ? List<Map<String, dynamic>>.from(jsonDecode(map['printerTypes']))
                 .map((printTypeMap) {
                 String type = printTypeMap['type'];
                 Map<String, dynamic>? data = printTypeMap['data'];
                 final printTypeInstance =
-                    PrintTypeRegistry.getPrintType(type, printTypeMap);
+                    PrinterTypeRegistry.getPrintType(type, printTypeMap);
                 if (printTypeInstance != null) {
                   return printTypeInstance;
                 } else {
@@ -209,7 +209,7 @@ class BluetoothDevice {
         'type': this.type,
         'aliasName': this.aliasName,
         'connected': this.connected,
-        'printTypes': serializePrintTypes(),
+        'printerTypes': serializePrintTypes(),
       };
 
   operator ==(Object other) {
@@ -223,17 +223,17 @@ class BluetoothDevice {
 
   String serializePrintTypes() {
     List<Map<String, dynamic>> printTypesMap =
-        printTypes.map((printType) => printType.toMap()).toList();
+        printerTypes.map((printType) => printType.toMap()).toList();
     return jsonEncode(printTypesMap);
   }
 
-  static List<PrintType> deserializePrintTypes(String jsonString) {
+  static List<PrinterType> deserializePrintTypes(String jsonString) {
     final List<dynamic> jsonList = jsonDecode(jsonString);
     return jsonList.map((printTypeMap) {
       String type = printTypeMap['type'];
       // Map<String, dynamic>? data = printTypeMap['data'];
       final printTypeInstance =
-          PrintTypeRegistry.getPrintType(type, printTypeMap);
+          PrinterTypeRegistry.getPrintType(type, printTypeMap);
       if (printTypeInstance != null) {
         return printTypeInstance;
       } else {

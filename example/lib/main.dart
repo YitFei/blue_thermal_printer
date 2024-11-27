@@ -10,7 +10,7 @@ import 'package:blue_thermal_printer/print_type_registry.dart';
 import 'package:blue_thermal_printer_example/testprint.dart';
 
 void main() {
-  PrintTypeRegistry.register(
+  PrinterTypeRegistry.register(
       'ReceiptPrinter', (data) => ReceiptPrinter.fromMap(data!));
   var device = BluetoothDevice(
     'Device1',
@@ -18,7 +18,7 @@ void main() {
     'My Bluetooth Device',
   );
 
-  device.printTypes = [
+  device.printerTypes = [
     ReceiptPrinter.fromMap({'extraProperty': "123"}),
   ];
 
@@ -274,7 +274,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class ReceiptPrinter extends PrintType {
+class ReceiptPrinter extends PrinterType {
   @override
   String get type => "ReceiptPrinter";
 
@@ -297,4 +297,7 @@ class ReceiptPrinter extends PrintType {
   factory ReceiptPrinter.fromMap(Map<String, dynamic> map) {
     return ReceiptPrinter(extraProperty: map['extraProperty']);
   }
+
+  @override
+  String get desc => throw UnimplementedError();
 }

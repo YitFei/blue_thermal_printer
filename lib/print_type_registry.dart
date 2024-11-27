@@ -1,21 +1,23 @@
-abstract class PrintType {
+abstract class PrinterType {
   String get type;
+
+  String get desc;
 
   void execute();
 
   Map<String, dynamic> toMap();
 }
 
-typedef PrintTypeFactory = PrintType Function(Map<String, dynamic>? data);
+typedef PrinterTypeFactory = PrinterType Function(Map<String, dynamic>? data);
 
-class PrintTypeRegistry {
-  static final Map<String, PrintTypeFactory> _registry = {};
+class PrinterTypeRegistry {
+  static final Map<String, PrinterTypeFactory> _registry = {};
 
-  static void register(String type, PrintTypeFactory factory) {
+  static void register(String type, PrinterTypeFactory factory) {
     _registry[type] = factory;
   }
 
-  static PrintType? getPrintType(String type, [Map<String, dynamic>? data]) {
+  static PrinterType? getPrintType(String type, [Map<String, dynamic>? data]) {
     final factory = _registry[type];
     if (factory != null) {
       return factory(data);
