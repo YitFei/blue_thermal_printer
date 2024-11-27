@@ -191,14 +191,14 @@ class BluetoothDevice {
             ? List<Map<String, dynamic>>.from(jsonDecode(map['printerTypes']))
                 .map((printTypeMap) {
                 String type = printTypeMap['type'];
-                Map<String, dynamic>? data = printTypeMap['data'];
+                // Map<String, dynamic>? data = printTypeMap['data'];
                 final printTypeInstance =
                     PrinterTypeRegistry.getPrintType(type, printTypeMap);
                 if (printTypeInstance != null) {
                   return printTypeInstance;
                 } else {
-                  print('Undefined Print Type: $type');
-                  throw Exception('Uknowned Print Type: $type');
+                  print('Undefined Printer Type: $type');
+                  throw Exception('Unsupported Printer Type: $type');
                 }
               }).toList()
             : [];
@@ -209,7 +209,7 @@ class BluetoothDevice {
         'type': this.type,
         'aliasName': this.aliasName,
         'connected': this.connected,
-        'printerTypes': serializePrintTypes(),
+        'printerTypes': serializePrinterTypes(),
       };
 
   operator ==(Object other) {
@@ -221,13 +221,13 @@ class BluetoothDevice {
   @override
   int get hashCode => address.hashCode;
 
-  String serializePrintTypes() {
+  String serializePrinterTypes() {
     List<Map<String, dynamic>> printTypesMap =
         printerTypes.map((printType) => printType.toMap()).toList();
     return jsonEncode(printTypesMap);
   }
 
-  static List<PrinterType> deserializePrintTypes(String jsonString) {
+  static List<PrinterType> deserializePrinterTypes(String jsonString) {
     final List<dynamic> jsonList = jsonDecode(jsonString);
     return jsonList.map((printTypeMap) {
       String type = printTypeMap['type'];
@@ -237,7 +237,7 @@ class BluetoothDevice {
       if (printTypeInstance != null) {
         return printTypeInstance;
       } else {
-        throw Exception('Unknown Print Type: $type');
+        throw Exception('Unknown Printer Type: $type');
       }
     }).toList();
   }
