@@ -1,10 +1,31 @@
-import 'package:blue_thermal_printer_example/testprint.dart';
-import 'package:flutter/material.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-import 'package:blue_thermal_printer/blue_thermal_printer.dart';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() => runApp(new MyApp());
+import 'package:blue_thermal_printer/blue_thermal_printer.dart';
+import 'package:blue_thermal_printer/print_type_registry.dart';
+import 'package:blue_thermal_printer_example/testprint.dart';
+
+void main() {
+  PrintTypeRegistry.register(
+      'ReceiptPrinter', (data) => ReceiptPrinter.fromMap(data!));
+  var device = BluetoothDevice(
+    'Device1',
+    '00:11:22:33:44:55',
+    'My Bluetooth Device',
+  );
+
+  device.printTypes = [
+    ReceiptPrinter.fromMap({'extraProperty': "123"}),
+  ];
+
+  var toMap = device.toMap();
+  var fromMap = BluetoothDevice.fromMap(toMap);
+  runApp(new MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -250,5 +271,30 @@ class _MyAppState extends State<MyApp> {
         duration: duration,
       ),
     );
+  }
+}
+
+class ReceiptPrinter extends PrintType {
+  @override
+  String get type => "ReceiptPrinter";
+
+  final String extraProperty;
+
+  ReceiptPrinter({required this.extraProperty});
+
+  @override
+  void execute() {}
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type,
+      "extraProperty": extraProperty
+      //'data': {}
+    };
+  }
+
+  factory ReceiptPrinter.fromMap(Map<String, dynamic> map) {
+    return ReceiptPrinter(extraProperty: map['extraProperty']);
   }
 }

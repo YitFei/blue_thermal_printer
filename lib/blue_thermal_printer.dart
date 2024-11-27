@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
-
+import 'package:blue_thermal_printer/print_type_registry.dart';
 import 'package:flutter/services.dart';
 
 class BlueThermalPrinter {
@@ -178,13 +179,29 @@ class BluetoothDevice {
   final String? aliasName;
   final int type = 0;
   bool connected = false;
+  List<PrintType> printTypes = [];
 
   BluetoothDevice(this.name, this.address, this.aliasName);
 
   BluetoothDevice.fromMap(Map map)
       : name = map['name'],
         address = map['address'],
-        aliasName = map['aliasName'];
+        aliasName = map['aliasName'],
+        printTypes = map['printTypes'] != null
+            ? List<Map<String, dynamic>>.from(jsonDecode(map['printTypes']))
+                .map((printTypeMap) {
+                String type = printTypeMap['type'];
+                Map<String, dynamic>? data = printTypeMap['data'];
+                final printTypeInstance =
+                    PrintTypeRegistry.getPrintType(type, printTypeMap);
+                if (printTypeInstance != null) {
+                  return printTypeInstance;
+                } else {
+                  print('Undefined Print Type: $type');
+                  throw Exception('Uknowned Print Type: $type');
+                }
+              }).toList()
+            : [];
 
   Map<String, dynamic> toMap() => {
         'name': this.name,
@@ -192,6 +209,7 @@ class BluetoothDevice {
         'type': this.type,
         'aliasName': this.aliasName,
         'connected': this.connected,
+        'printTypes': serializePrintTypes(),
       };
 
   operator ==(Object other) {
@@ -202,4 +220,25 @@ class BluetoothDevice {
 
   @override
   int get hashCode => address.hashCode;
+
+  String serializePrintTypes() {
+    List<Map<String, dynamic>> printTypesMap =
+        printTypes.map((printType) => printType.toMap()).toList();
+    return jsonEncode(printTypesMap);
+  }
+
+  static List<PrintType> deserializePrintTypes(String jsonString) {
+    final List<dynamic> jsonList = jsonDecode(jsonString);
+    return jsonList.map((printTypeMap) {
+      String type = printTypeMap['type'];
+      // Map<String, dynamic>? data = printTypeMap['data'];
+      final printTypeInstance =
+          PrintTypeRegistry.getPrintType(type, printTypeMap);
+      if (printTypeInstance != null) {
+        return printTypeInstance;
+      } else {
+        throw Exception('Unknown Print Type: $type');
+      }
+    }).toList();
+  }
 }
