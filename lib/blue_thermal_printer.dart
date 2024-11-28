@@ -193,7 +193,7 @@ class BluetoothDevice {
                 String type = printTypeMap['type'];
                 // Map<String, dynamic>? data = printTypeMap['data'];
                 final printTypeInstance =
-                    PrinterTypeRegistry.getPrintType(type, printTypeMap);
+                    PrinterTypeRegistry.getPrintType(0, printTypeMap);
                 if (printTypeInstance != null) {
                   return printTypeInstance;
                 } else {
@@ -233,7 +233,7 @@ class BluetoothDevice {
       String type = printTypeMap['type'];
       // Map<String, dynamic>? data = printTypeMap['data'];
       final printTypeInstance =
-          PrinterTypeRegistry.getPrintType(type, printTypeMap);
+          PrinterTypeRegistry.getPrintType(0, printTypeMap);
       if (printTypeInstance != null) {
         return printTypeInstance;
       } else {
