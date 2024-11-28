@@ -12,6 +12,7 @@ typedef PrinterTypeFactory = PrinterType Function(Map<String, dynamic>? data);
 
 class PrinterTypeRegistry {
   static final Map<String, PrinterTypeFactory> _registry = {};
+  static Map<String, PrinterTypeFactory> get registry => _registry;
 
   static void register(String type, PrinterTypeFactory factory) {
     _registry[type] = factory;
