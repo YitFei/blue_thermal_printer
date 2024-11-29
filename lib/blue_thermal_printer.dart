@@ -1,8 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:blue_thermal_printer/print_type_registry.dart';
+
 import 'package:flutter/services.dart';
+
+import 'package:blue_thermal_printer/print_type_registry.dart';
 
 class BlueThermalPrinter {
   static const int STATE_OFF = 10;
@@ -240,5 +243,21 @@ class BluetoothDevice {
         throw Exception('Unknown Printer Type: $type');
       }
     }).toList();
+  }
+
+  BluetoothDevice copyWith({
+    String? name,
+    String? address,
+    String? aliasName,
+    bool? connected,
+    List<PrinterType>? printerTypes,
+  }) {
+    return BluetoothDevice(
+      name ?? this.name,
+      address ?? this.address,
+      aliasName ?? this.aliasName,
+    )
+      ..connected = connected ?? this.connected
+      ..printerTypes = printerTypes ?? this.printerTypes;
   }
 }
