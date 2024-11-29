@@ -4,8 +4,6 @@ abstract class PrinterType {
   void execute();
 
   Map<String, dynamic> toMap();
-
-  PrinterType copyWith();
 }
 
 typedef PrinterTypeFactory = PrinterType Function(Map<String, dynamic>? data);
