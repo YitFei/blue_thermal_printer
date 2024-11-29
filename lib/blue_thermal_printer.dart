@@ -258,6 +258,7 @@ class BluetoothDevice {
       aliasName ?? this.aliasName,
     )
       ..connected = connected ?? this.connected
-      ..printerTypes = printerTypes ?? this.printerTypes;
+      ..printerTypes =
+          printerTypes ?? this.printerTypes.map((pt) => pt.copyWith()).toList();
   }
 }

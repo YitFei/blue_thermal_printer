@@ -297,4 +297,13 @@ class ReceiptPrinter extends PrinterType {
   factory ReceiptPrinter.fromMap(Map<String, dynamic> map) {
     return ReceiptPrinter(extraProperty: map['extraProperty']);
   }
+
+  @override
+  ReceiptPrinter copyWith({
+    String? extraProperty,
+  }) {
+    return ReceiptPrinter(
+      extraProperty: extraProperty ?? this.extraProperty,
+    );
+  }
 }
