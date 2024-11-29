@@ -300,4 +300,11 @@ class ReceiptPrinter extends PrinterType {
 
   @override
   String get desc => throw UnimplementedError();
+
+  @override
+  PrinterType copyWith({
+    String? extraProperty,
+  }) {
+    return ReceiptPrinter(extraProperty: extraProperty ?? this.extraProperty);
+  }
 }
